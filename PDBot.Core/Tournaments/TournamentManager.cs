@@ -154,7 +154,7 @@ namespace PDBot.Core.Tournaments
                 builder.Append($"[sD] Pairings for Round {round.RoundNum}:\n");
             var misses = 0;
             bool isPD = eventModel.Series.Contains("Penny Dreadful") && Features.ConnectToDiscord;
-            foreach (var pairing in round.Matches)
+            foreach (var pairing in round.Matches.sort())
             {
                 if (pairing.A == pairing.B)
                 {

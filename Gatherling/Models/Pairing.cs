@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Gatherling.Models
 {
-    public class Pairing
+    public class Pairing : IComparable<Box>
     {
         public string A { get; internal set; }
         public int A_wins { get; internal set; }
@@ -13,7 +14,7 @@ namespace Gatherling.Models
         public string Res { get; internal set; }
         public string Verification { get; internal set; }
 
-        public string[] Players => A == B ? new string[] { A } : new string[] { A, B };
+        public string[] Players => A == B ? new string[] { A } : Regex.replace(A.lower, "[^a-z]").compareTo(Regex.replace(B.lower, "[^a-z]")) <= 0 ? new string[] { A, B } : new string[] { B, A };
 
         public override string ToString()
         {
@@ -48,6 +49,11 @@ namespace Gatherling.Models
                 }
             }
         }
+        public int CompareTo(Pairing pair)
+        {
+            return A.Regex.replace(A.lower, "[^a-z]").compareTo(Regex.replace(pair.A.lower, "[^a-z]"));
+        }
+
     }
 
 }
