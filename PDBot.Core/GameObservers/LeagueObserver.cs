@@ -57,7 +57,7 @@ namespace PDBot.Core.GameObservers
                 {
                     HostRun = LeagueRunOpp = null;
                     match.Log("[League] Invalid Match");
-                    return $"[sD][sR] {name} was not on a submitted league decklist. This is not a league match.";
+                    return $"[sD][sR] `{name}` was not on a submitted league decklist. This is not a league match.";
                 }
             }
             if (gameLogLine.Line.EndsWith("has lost the game due to inaction."))
@@ -93,7 +93,7 @@ namespace PDBot.Core.GameObservers
                 if (loud)
                 {
                     match.SendChat($"[sD][sR] This is not a valid @[League] pairing!");
-                    match.SendChat($"[sD][sR] {match.Players[0]}, you do not have an active run.");
+                    match.SendChat($"[sD][sR] `{match.Players[0]}`, you do not have an active run.");
                 }
 
                 return false;
@@ -148,8 +148,8 @@ namespace PDBot.Core.GameObservers
                 if (HostRun == null)
                 {
                     if (loud)
-                        match.SendChat($"[sD][sR] {match.Players[0]}, you do not have an active run.");
-                match.Log($"[League] {match.Players[0]} doesn't have active run");
+                        match.SendChat($"[sD][sR] `{match.Players[0]}`, you do not have an active run.");
+                match.Log($"[League] `{match.Players[0]}` doesn't have active run");
                 }
                 else if (LeagueRunOpp == null)
                 {
@@ -179,7 +179,7 @@ namespace PDBot.Core.GameObservers
                 var LosingRun = (new DecksiteApi.Deck[] { HostRun, LeagueRunOpp }).Single(d => d != WinningRun);
                 if (Features.PublishResults && await DecksiteApi.UploadResultsAsync(WinningRun, LosingRun, record, match.MatchID))
                 {
-                    await DiscordService.SendToLeagueAsync($":trophy: {WinningRun.Person} {record} {LosingRun.Person}");
+                    await DiscordService.SendToLeagueAsync($":trophy: `{WinningRun.Person}` {record} `{LosingRun.Person}");
                 }
                 else
                 {
@@ -187,11 +187,11 @@ namespace PDBot.Core.GameObservers
                     {
                         var winnerMention = await DiscordFunctions.MentionOrElseNameAsync(WinningRun.Person);
                         var losingMention = await DiscordFunctions.MentionOrElseNameAsync(LosingRun.Person);
-                        await DiscordService.SendToLeagueAsync($":trophy: {winnerMention} {record} {losingMention} (Please verify and report manually)");
+                        await DiscordService.SendToLeagueAsync($":trophy: `{winnerMention}` {record} `{losingMention}` (Please verify and report manually)");
                     }
                     catch (Exception c)
                     {
-                        await DiscordService.SendToLeagueAsync($":trophy: {WinningRun.Person} {record} {LosingRun.Person} (Please verify and report manually)");
+                        await DiscordService.SendToLeagueAsync($":trophy: `{WinningRun.Person}` {record} `{LosingRun.Person}` (Please verify and report manually)");
                         Console.WriteLine(c);
                         await DiscordService.SendToTestAsync(c.ToString());
                     }
